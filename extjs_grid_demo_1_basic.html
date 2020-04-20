@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ExtJS Grid: Basic</title>
+<link rel="stylesheet" href="//cdn.sencha.com/ext/commercial/7.2.0/build/classic/theme-triton/resources/theme-triton-all-debug.css">
+<script type="text/javascript" src="//cdn.sencha.com/ext/commercial/7.2.0/build/ext-all-debug.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script id="sourceCode" type="text/javascript">
+/**
+ * A representation of a single record.
+ * https://docs.sencha.com/extjs/7.2.0/classic/Ext.data.Model.html
+ * ./app/model/Users.js
+ */
+Ext.define('Demo.model.User', {
+    extend: 'Ext.data.Model',
+    
+    /**
+     * Define the fields that will be used for a record.
+     * https://docs.sencha.com/extjs/7.2.0/classic/Ext.data.Model.html#cfg-fields
+     */
+    fields: [
+        'id',
+        'role_id',
+        'active',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'logged_in',
+        'expires_on'
+    ],
+
+    /**
+     * The proxy is used to tell the model where to send and recieve data. 
+     * It can also be used by the Store to to know how to load many records
+     * if the rest api returns an array of records.
+     * https://docs.sencha.com/extjs/7.2.0/classic/Ext.data.proxy.Rest.html
+     */
+    proxy: {
+        type: 'rest',
+        //
+        // if you want to test experiement locally, with saving download 
+        // the db.json file from https://trozdol.com/demos/data/db.json
+        // and install a tool called json-server.
+        //
+        // $ npm install json-server # then 
+        // $ json-server db.json
+        //
+        url: window.location.host == 'localhost' 
+            ? 'http://localhost:3000/users' 
+            : 'https://trozdol.com/demos/data/db.json',
+        
+        /**
+         * How to interperet incoming data.
+         * https://docs.sencha.com/extjs/7.2.0/classic/Ext.data.reader.Json.html
+         */
+        reader: {
+            type: 'json',
+
+            /**
+             * The property to look for the fields defined above.
+             */
+            rootProperty: 'users'
+        }
+    }
+});
+
+/**
+ * The Grid view definition to be used in places like the Main view or other views.
+ * https://docs.sencha.com/extjs/7.2.0/classic/Ext.grid.Panel.html
+ * ./app/view/account/Users.js
+ */
+Ext.define('Demo.view.account.Users', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.usersgrid',
+    requires: [
+        // 'Demo.model.User'
+    ],
+
+    title: 'Users',
+    iconCls: 'x-fa fa-users',
+
+    /**
+     * Including the store in the grid definition 
+     * to allow this grid to be used as a self contained component.
+     */ 
+    store: {
+        storeId: 'Users',
+        model: 'Demo.model.User',
+        autoLoad: true
+    },
+
+    columns: [{
+        xtype: 'gridcolumn',
+        dataIndex: 'id',
+        text: 'ID',
+        width: 60,
+        align: 'right'
+    }, { 
+        dataIndex: 'first_name', 
+        text: 'First Name', 
+        width: 110, 
+        align: 'left'
+    }, { 
+        dataIndex: 'last_name', 
+        text: 'Last Name', 
+        width: 110, 
+        align: 'left'
+    }, {
+        dataIndex: 'email', 
+        text: 'Email',
+        width: 300
+    }, { 
+        // https://docs.sencha.com/extjs/7.2.0/classic/Ext.grid.column.Check.html
+        xtype: 'checkcolumn',
+        dataIndex: 'active',
+        text: 'Active', 
+        width: 80,
+        align: 'center'
+    }, {
+        xtype: 'datecolumn',
+        dataIndex: 'logged_in',
+        text: 'Logged In',
+        width: 100,
+        align: 'center',
+    }, {
+        xtype: 'datecolumn',
+        dataIndex: 'expires_on',
+        text: 'Expires On',
+        width: 140,
+        align: 'center'
+    }]
+});
+
+/**
+ * https://docs.sencha.com/extjs/7.2.0/guides/application_architecture/view_models_data_binding.html
+ * ./app/view/main/MainViewModel.js
+ */ 
+Ext.define('Demo.view.main.MainViewModel', {
+    extend: 'Ext.app.ViewModel',
+    alias: 'viewmodel.main',
+
+    data: {
+        title: 'Demo: Basic Grid'
+    }
+});
+
+/**
+ * https://docs.sencha.com/extjs/7.2.0/classic/Ext.app.ViewController.html
+ * ./app/view/main/MainController.js
+ */  
+Ext.define('Demo.view.main.MainController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.main',
+
+    /**
+     * For the purposes of viewing the demo source code.
+     */ 
+    viewSource: function (btn) {
+        var text = document.querySelector('#sourceCode').text;
+
+        /**
+         * https://docs.sencha.com/extjs/7.2.0/classic/Ext.window.Window.html
+         */ 
+        window.viewSourceWindow = Ext.create('Ext.window.Window', {
+            width: '65%',
+            height: '75%',
+            layout: 'fit',
+            title: 'View Source',
+            items: [{
+                xtype: 'container',
+                cls: 'x-selectable',
+                scrollable: true,
+                selectable: true,
+                html: `<pre><code class="language-javascript">${text}</code></pre>`,
+                margin: 10
+            }],
+            listeners: {
+                afterrender: function () {
+                    if (!window.Prism) return;
+                    Prism.highlightElement(this.el.dom.querySelector('code'));
+                }
+            }
+
+        }).show();
+    }
+});
+
+/**
+ * The primary view that references the Users grid view. 
+ * Overrides can be applied in the configuration.
+ * https://docs.sencha.com/extjs/7.2.0/classic/Ext.panel.Panel.html
+ * ./app/view/main/Main.js
+ */ 
+Ext.define('Demo.view.main.Main', {
+    extend: 'Ext.panel.Panel',
+    alias: 'widget.main',
+
+    requires: [
+        // 'Demo.view.account.Users',
+        // 'Demo.view.main.MainViewModel',
+        // 'Demo.view.main.MainController'
+    ],
+    
+    viewModel: 'main',
+    
+    controller: 'main',
+    
+    header: {
+        bind: { 
+            title: '{title}' 
+        },
+        itemPosition: 1,
+        items: [{
+            xtype: 'button',
+            ui: 'default-toolbar',
+            cls: 'dock-tab-btn',
+            iconCls: 'x-fa fa-code',
+            text: 'View Source',
+            handler: 'viewSource'
+        }]
+    },
+
+    bodyPadding: 20,
+    
+    /**
+     * Fill the available area. When there's 
+     * more than one 'item' add it horizontally.
+     */ 
+    layout: {
+        type: 'hbox',
+        align: 'stretch',
+        pack: 'stretch'
+    },
+    
+    /**
+     * Apply to all items
+     */
+    defaults: {
+        flex: 1
+    },
+
+    items: [{
+        xtype: 'usersgrid',
+    }]
+});
+
+/**
+ * https://docs.sencha.com/extjs/7.2.0/classic/Ext.app.Application.html
+ * ./app.js
+ */ 
+Ext.application({
+    name       : 'Demo',
+    views      : [ 'main.Main' ],
+    mainView   : 'Demo.view.main.Main'
+});
+
+</script>
+</head>
+<body>
+</body>
+</html>
