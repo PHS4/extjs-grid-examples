@@ -1,18 +1,21 @@
 # Demo local REST API
 
-If you want to run a local test REST API using NodeJS 
-use NPM to install json-server https://github.com/typicode/json-server
+If you want to run a local Mock REST API using [NodeJS use NPM](https://nodejs.org/en/download/).
 
 ```
-npm i -g json-server
+git clone https://github.com/PHS4/extjs-grid-examples.git
+
+cd extjs-grid-examples/
+
+npm install
+
+npm start
 ```
 
-Download https://trozdol.com/demos/data/db.json
+Then run any of the example below. You can see edits are made to the db.json file.
 
-Then run 
+- http://localhost:3000/extjs_grid_demo_1_basic.html
 
-```
-json-server db.json
-```
+- http://localhost:3000/extjs_grid_demo_2_rowediting.html
 
-This will allow you to run a mock REST server to save changes to the db.json file.
+- http://localhost:3000/extjs_grid_demo_3_formediting.html
