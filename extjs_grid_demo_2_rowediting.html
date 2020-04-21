@@ -44,14 +44,6 @@ Ext.define('Demo.model.User', {
      */
     proxy: {
         type: 'rest',
-        //
-        // if you want to test experiement locally, with saving download 
-        // the db.json file from https://trozdol.com/demos/data/db.json
-        // and install a tool called json-server.
-        //
-        // $ npm install json-server # then 
-        // $ json-server db.json
-        //
         url: window.location.host == 'localhost:3000' ? 'http://localhost:3000/users' : 'db.json',
         
         /**
@@ -196,18 +188,6 @@ Ext.define('Demo.view.main.MainController', {
     alias: 'controller.main',
 
     /**
-     * Listen for changes made to data in the ViewModel
-     * https://docs.sencha.com/extjs/7.2.0/modern/Ext.app.ViewController.html#cfg-bindings
-     */
-    bindings: {
-        onSelectionChange: '{selectedUser}'
-    },
-
-    onSelectionChange: function (user) {
-        console.log(user);
-    },
-
-    /**
      * Once the edits are made the changes are only stored in memory.
      * Here we get the record (model instance) from the context param
      * to call the save method. This will tell the model's proxy to make
@@ -215,14 +195,13 @@ Ext.define('Demo.view.main.MainController', {
      * https://docs.sencha.com/extjs/7.2.0/classic/Ext.data.Model.html
      */
     onEdit: function (editor, context, eOpts) {
+        if (window.location.host != 'localhost:3000') {
+            return Ext.Msg.alert('Read Only', 'Changes could not be written.');
+        }
         context.record.save({
             callback: function (record, operation, success) {
                 if (!success) {
-                    if (location.host !== 'localhost') {
-                        return Ext.Msg.alert('Read Only', 'The server for this example does not allow saving.');
-                    } else {
-                        return Ext.Msg.alert('Error', 'There was an issue saving.');
-                    }
+                    return Ext.Msg.alert('Error', 'There was an issue saving.');
                 }
 
                 // this should be more readily available info

@@ -45,14 +45,6 @@ Ext.define('Demo.model.User', {
      */
     proxy: {
         type: 'rest',
-        //
-        // if you want to test experiement locally, with saving download 
-        // the db.json file from https://trozdol.com/demos/data/db.json
-        // and install a tool called json-server.
-        //
-        // $ npm install json-server # then 
-        // $ json-server db.json
-        //
         url: window.location.host == 'localhost:3000' ? 'http://localhost:3000/users' : 'db.json',
         
         /**
@@ -230,7 +222,7 @@ Ext.define('Demo.view.main.Main', {
     
     /**
      * Fill the available area. When there's 
-     * more than one 'item' add it horizontally.
+     * more than one 'item' show them horizontally.
      */ 
     layout: {
         type: 'hbox',

@@ -44,14 +44,6 @@ Ext.define('Demo.model.User', {
      */
     proxy: {
         type: 'rest',
-        //
-        // if you want to test experiement locally, with saving download 
-        // the db.json file from https://trozdol.com/demos/data/db.json
-        // and install a tool called json-server.
-        //
-        // $ npm install json-server # then 
-        // $ json-server db.json
-        //
         url: window.location.host == 'localhost:3000' ? 'http://localhost:3000/users' : 'db.json',
         
         /**
@@ -252,6 +244,9 @@ Ext.define('Demo.view.main.MainController', {
      * On save click.
      */ 
     saveUser: function (btn, eOpts) {
+        if (window.location.host != 'localhost:3000') {
+            return Ext.Msg.alert('Read Only', 'Changes could not be written.');
+        }
         var form = this.getView().down('userform').getForm();
         form.updateRecord().getRecord().save();
     },
@@ -265,7 +260,7 @@ Ext.define('Demo.view.main.MainController', {
         /**
          * https://docs.sencha.com/extjs/7.2.0/classic/Ext.window.Window.html
          */ 
-        window.viewSourceWindow = Ext.create('Ext.window.Window', {
+        Ext.create('Ext.window.Window', {
             width: '65%',
             height: '75%',
             layout: 'fit',
