@@ -1,0 +1,66 @@
+
+/* Minor Tweaks to Grid Buttons */
+
+.x-btn-default-small.icon-only {
+    border-radius: 3px;
+    padding: 7px 0px 7px 0px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e1e4e8;
+}
+.x-btn-default-small.icon-only .x-btn-icon-el-default-small {
+    font-size: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+.x-button-default-small-cell > .x-grid-cell-inner >.x-btn-default-small.icon-only {
+    vertical-align: top;
+}
+
+/* Markdown Renderer */
+
+.rendered-markdown {
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 3px 12px -11px black;
+    overflow: hidden;
+}
+.rendered-markdown * {
+    max-width: 100%;
+}
+.rendered-markdown img {
+    margin: 10px 0 10px 0;
+}
+
+/* View Source */
+
+.docs-link {
+    color: lightgray;
+}
+.docs-link,
+.interactive-source .token.property {
+    transition: ease-in-out .25s all;
+}
+
+.docs-link:hover,
+.interactive-source .token.property:hover,
+.interactive-source .token.property:active {
+    color: white;
+    border-radius: 4px;
+    background-color: rgba(255, 0, 255, 1);
+    box-shadow: inset 0 0 0px 10px rgba(255, 0, 255, 1), 0 0 0px 3px rgba(255, 0, 255, 1);
+}
+
+.docs-link:active,
+.interactive-source .token.property:active {
+    box-shadow: inset 0 0 0px 10px rgba(255, 0, 255, 1), 0 0 0px 5px rgba(255, 0, 255, 1);
+}
+
+/* Source View */
+
+.instructions {
+    color: white;
+    background-color: #4a4a4a;
+    padding: 20px;
+}

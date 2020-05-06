@@ -1,0 +1,55 @@
+{
+    "children": [
+        {
+            "text": "Item 1",
+            "leaf": false,
+            "iconCls": "x-fa fa-folder",
+            "children": [
+                {
+                    "text": "Child 1a",
+                    "leaf": true,
+                    "iconCls": "x-fa fa-book"
+                },
+                {
+                    "text": "Child 2a",
+                    "leaf": true,
+                    "iconCls": "x-fa fa-graduation-cap"
+                }
+            ]
+        },
+        {
+            "text": "Item 2",
+            "expanded": true,
+            "iconCls": "x-fa fa-folder",
+            "children": [
+                {
+                    "text": "Child 1b",
+                    "leaf": true,
+                    "iconCls": "x-fa fa-book"
+                },
+                {
+                    "text": "Child 2b",
+                    "leaf": true,
+                    "iconCls": "x-fa fa-graduation-cap"
+                }
+            ]
+        },
+        {
+            "text": "Item 3",
+            "leaf": false,
+            "iconCls": "x-fa fa-folder",
+            "children": [
+                {
+                    "text": "Child 1c",
+                    "leaf": true,
+                    "iconCls": "x-fa fa-book"
+                },
+                {
+                    "text": "Child 2c",
+                    "leaf": true,
+                    "iconCls": "x-fa fa-graduation-cap"
+                }
+            ]
+        }
+    ]
+}

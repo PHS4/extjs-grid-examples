@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExtJS Grid Example 2</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.1.0/styles/github.min.css">
+    <link rel="stylesheet" href="//cdn.sencha.com/ext/commercial/7.2.0/build/classic/theme-triton/resources/theme-triton-all-debug.css">
+    <script type="text/javascript" src="//cdn.sencha.com/ext/commercial/7.2.0/build/ext-all-debug.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/10.0.0/markdown-it.min.js"></script>
+    <style>
+        .x-btn-default-small.icon-only {
+            border-radius: 3px;
+            padding: 7px 0px 7px 0px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #e1e4e8;
+        }
+        .x-btn-default-small.icon-only .x-btn-icon-el-default-small {
+            font-size: 16px;
+            height: 16px;
+            line-height: 16px;
+        }
+        .x-button-default-small-cell > .x-grid-cell-inner >.x-btn-default-small.icon-only {
+            vertical-align: top;
+        }
+
+        .rendered-markdown {
+            padding: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 3px 12px -11px black;
+            overflow: hidden;
+        }
+        .rendered-markdown * {
+            max-width: 100%;
+        }
+        .rendered-markdown img {
+            margin: 10px 0 10px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <script>
+
+        Ext.define('Demo.view.repo.Repos', {
+            extend: 'Ext.grid.Panel',
+            alias: 'widget.reposgrid',
+            requires: [
+                'RendererUtil'
+            ],
+
+            title: 'Repos',
+
+            store: {
+                autoLoad: true,
+                fields: [
+                    'id',
+                    'node_id',
+                    'name',
+                    'full_name',
+                    'private',
+                    'description',
+                    'homepage',
+                    'fork',
+                    'size',
+                    'language',
+                    'license',
+                    'forks',
+                    'watchers',
+                    'default_branch',
+                    { name: 'open_issues', type: 'number' },
+                    { name: 'stargazers_count', type: 'number' },
+                    { name: 'watchers_count', type: 'number' },
+                    { name: 'forks_count', type: 'number' },
+                    { name: 'open_issues_count', type: 'number' },
+                    { name: 'has_issues', type: 'boolean' },
+                    { name: 'has_projects', type: 'boolean' },
+                    { name: 'has_downloads', type: 'boolean' },
+                    { name: 'has_wiki', type: 'boolean' },
+                    { name: 'has_pages', type: 'boolean' },
+                    { name: 'archived', type: 'boolean' },
+                    { name: 'disabled', type: 'boolean' },
+                    { name: 'created_at', type: 'date' }, 
+                    { name: 'updated_at', type: 'date' }, 
+                    { name: 'pushed_at', type: 'date' }, 
+                    'url',
+                    'html_url', 
+                    'forks_url', 
+                    'mirror_url', 
+                    'git_url', 
+                    'ssh_url', 
+                    'clone_url', 
+                    'svn_url', 
+                    'keys_url', 
+                    'collaborators_url', 
+                    'teams_url', 
+                    'hooks_url', 
+                    'issue_events_url', 
+                    'events_url', 
+                    'assignees_url', 
+                    'branches_url', 
+                    'tags_url', 
+                    'blobs_url', 
+                    'git_tags_url', 
+                    'git_refs_url', 
+                    'trees_url', 
+                    'statuses_url', 
+                    'languages_url', 
+                    'stargazers_url', 
+                    'contributors_url', 
+                    'subscribers_url', 
+                    'subscription_url', 
+                    'commits_url', 
+                    'git_commits_url', 
+                    'comments_url', 
+                    'issue_comment_url', 
+                    'contents_url', 
+                    'compare_url', 
+                    'merges_url', 
+                    'archive_url', 
+                    'downloads_url', 
+                    'issues_url', 
+                    'pulls_url', 
+                    'milestones_url', 
+                    'notifications_url', 
+                    'labels_url', 
+                    'releases_url', 
+                    'deployments_url'
+                ],
+                proxy: {
+                    type: 'rest',
+                    url: 'https://api.github.com/users/sencha/repos',
+                    reader: {
+                        type: 'json'
+                    }
+                }
+            },
+
+            columns: {
+                items: [
+                    { 
+                        xtype: 'booleancolumn', 
+                        dataIndex: 'has_issues',
+                        text: 'Has Issues',
+                        trueText: 'Yes',
+                        falseText: 'No',
+                        align: 'center',
+                        hidden: true
+                    },
+                    { 
+                        xtype: 'numbercolumn',
+                        dataIndex: 'open_issues_count',
+                        text: 'Issues',
+                        width: 70,
+                        format: '0,000',
+                        align: 'center',
+                        renderer: RendererUtil.multi('bold', 'numberInverseColor')
+                    },
+                    {
+                        xtype: 'widgetcolumn',
+                        ingoreExport: true,
+                        width: 60,
+                        padding: 0,
+                        widget: {
+                            xtype: 'button',
+                            cls: 'icon-only',
+                            iconCls: 'x-fa fa-bug',
+                            tooltip: 'View Issues',
+                            preventDefault: true,
+                            bind: { href: '{record.url}' },
+                            handler: function (btn, eOpts) {
+                                console.log(btn.href + '/issues');
+                            }
+                        }
+                    },
+                    { 
+                        xtype: 'gridcolumn',
+                        dataIndex: 'full_name',
+                        text: 'Name',
+                        width: 300, 
+                        renderer: RendererUtil.multi('bold')
+                    },
+                    { 
+                        xtype: 'gridcolumn',
+                        dataIndex: 'description', 
+                        text: 'Description',
+                        flex: 1
+                    },
+                    {
+                        xtype: 'datecolumn',
+                        dataIndex: 'updated_at',
+                        text: 'Last Updated'
+                    },
+                    {
+                        xtype: 'widgetcolumn',
+                        text: 'Clone',
+                        ingoreExport: true,
+                        width: 60,
+                        padding: 0,
+                        widget: {
+                            xtype: 'button',
+                            cls: 'icon-only',
+                            iconCls: 'x-fab fa-github',
+                            tooltip: 'Open on Desktop',
+                            hrefTarget: '',
+                            bind: { href: 'x-github-client://openRepo/{record.clone_url}' }
+                        }
+                    }
+                ]
+            }
+        });
+        
+        Ext.define('Demo.view.repo.Issues', {
+            extend: 'Ext.grid.Panel',
+            alias: 'widget.issuesgrid',
+
+            title: 'Issues',
+            
+            store: {
+                fields: [
+                    'id',
+                    'node_id',
+                    'number',
+                    'title',
+                    'labels',
+                    'state',
+                    'locked',
+                    'assignee',
+                    'assignees',
+                    'milestone',
+                    'comments',
+                    'created_at',
+                    'updated_at',
+                    'closed_at',
+                    'url',
+                    'repository_url',
+                    'labels_url',
+                    'comments_url',
+                    'events_url',
+                    'html_url',
+                    'body'
+                ],
+                proxy: {
+                    type: 'rest',
+                    url: 'https://api.github.com/repos/sencha/{name}/issues',
+                    reader: 'json'
+                }
+            },
+
+            columns: [
+                { xtype: 'gridcolumn', dataIndex: 'number',     text: '#',      width: 45, align: 'center', renderer: RendererUtil.bold },
+                { xtype: 'gridcolumn', dataIndex: 'title',      text: 'Title',  flex: 1, renderer: RendererUtil.bold },
+                { xtype: 'gridcolumn', dataIndex: 'state',      text: 'State',  align: 'center', renderer: Ext.util.Format.uppercase },
+                {
+                    xtype: 'widgetcolumn',
+                    ingoreExport: true,
+                    width: 140,
+                    widget: {
+                        xtype: 'button',
+                        iconCls: 'x-fa fa-comment-alt',
+                        iconAlign: 'right',
+                        tooltip: 'View Comments on GitHub',
+                        bind: { 
+                            disabled: '{record.comments == 0}',
+                            text: '{record.comments:plural("Comment")}',
+                            href: '{record.comments_url}'
+                        }
+                    }
+                },
+                {
+                    xtype: 'widgetcolumn',
+                    ingoreExport: true,
+                    width: 140,
+                    widget: {
+                        xtype: 'button',
+                        iconCls: 'x-fa fa-comment-alt',
+                        iconAlign: 'right',
+                        tooltip: 'Open Issue on GitHub',
+                        bind: {
+                            disabled: '{record.comments == 0}',
+                            href: '{record.comments_url}'
+                        }
+                    }
+                }
+            ],
+
+            plugins: {
+                rowexpander: {
+                    headerWidth: 35, // default is too narrow
+                    rowBodyTpl: new Ext.XTemplate(
+                        '<div class="rendered-markdown" style="">{[this.render(values.body)]}</div>', 
+                        {
+                            render: RendererUtil.markdown
+                        }
+                    )
+                }
+            }
+        });
+
+        Ext.define('Demo.view.main.Main', {
+            extend: 'Ext.panel.Panel',
+            alias: 'widget.main',
+            
+            viewModel: {
+                
+            },
+
+            title: 'Example 4 | Repo Dashboard',
+
+            bodyPadding: 10,
+
+            layout: 'border',
+
+            items: [
+                {
+                    region: 'center',
+                    xtype: 'reposgrid',
+                    bind: {
+                        selection: '{selectedRepo}'
+                    },
+                    // listeners: {
+                    //     // selectionchange: function () {},
+                    //     // select: function (grid, selection) {
+                    //     //     console.log(selection.get('has_issues'), selection.get('url')); 
+                    //     //     var issuesGrid = this.up('main').down('issuesgrid');
+                    //     //     var store = issuesGrid.getStore(); 
+                    //     //     store.getProxy().setUrl(selection.get('url') + '/issues');
+                    //     //     store.load();
+                    //     // }
+                    // }
+                },
+                {
+                    region: 'east',
+                    collapsible: true,
+                    split: true,
+                    width: 600,
+
+                    xtype: 'issuesgrid',
+                    bind: {
+                        title: 'Issue {selectedRepo.full_name}',
+                        selection: '{selectedIssue}'
+                    }
+                }
+            ]
+        });
+
+        Ext.application({
+            name: 'Demo',
+
+            models: [  ],
+            stores: [  ],
+            controllers : [ ],
+            views: [
+                'repo.Issues',
+                'repo.Repos',
+                'main.Main'
+            ],
+
+            mainView: 'Demo.view.main.Main',
+
+            launch: function () {
+                console.log(arguments.callee.name);
+            }
+        });
+
+    </script>
+</body>
+</html>
