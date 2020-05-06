@@ -2,7 +2,6 @@ Ext.define('Demo.view.repo.RepoViewController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.repoviewcontroller',
     
-    // color: white;
     css: `
         font-weight: 600;
         text-align: center;
@@ -11,7 +10,6 @@ Ext.define('Demo.view.repo.RepoViewController', {
         border-radius: 3px; 
         background-color: #f6f6f6;
     `,
-    // background-color: lightslategray;
 
     sumSummary: function (value) {
         return `<div style="${this.css}">Total: ${value}</div>`;

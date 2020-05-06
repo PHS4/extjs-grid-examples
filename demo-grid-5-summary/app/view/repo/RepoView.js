@@ -46,7 +46,6 @@ Ext.define('Demo.view.repo.RepoView', {
         xtype: 'numbercolumn',
         dataIndex: 'watchers_count',
         text: 'Watchers',
-        iconCls: 'x-fa fa-cog',
         align: 'center',
         format: '0,000',
         summaryType: 'sum',
