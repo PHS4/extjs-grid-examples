@@ -16,6 +16,7 @@ Ext.define('Demo.model.github.Repo', {
         'forks',
         'watchers',
         'default_branch',
+        { name: 'avatar_url', mapping: 'owner.avatar_url' },
         { name: 'open_issues', type: 'number' },
         { name: 'stargazers_count', type: 'number' },
         { name: 'watchers_count', type: 'number' },
@@ -78,8 +79,8 @@ Ext.define('Demo.model.github.Repo', {
 
     proxy: {
         type: 'rest',
-        url: 'https://api.github.com/users/sencha/repos',
-        // url: 'data/repos.json',
+        // url: 'https://api.github.com/users/sencha/repos',
+        url: 'data/repos.json',
         reader: {
             type: 'json'
         }

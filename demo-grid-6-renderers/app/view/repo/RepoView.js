@@ -31,6 +31,12 @@ Ext.define('Demo.view.repo.RepoView', {
         hidden: true
     },
     {
+        dataIndex: 'avatar_url',
+        width: 50,
+        align: 'center',
+        renderer: 'imageRenderer'
+    },
+    {
         xtype: 'numbercolumn',
         dataIndex: 'open_issues_count',
         text: 'Issues',
@@ -39,9 +45,7 @@ Ext.define('Demo.view.repo.RepoView', {
         align: 'center',
         renderer: RendererUtil.multi('bold', 'numberInverseColor'),
         summaryType: 'sum',
-        summaryRenderer: function (value, summaryData, dataIndex) {
-            return `<b>${value} Total Issues</b>`;
-        }
+        summaryRenderer: 'sumSummary'
     },
     {
         xtype: 'numbercolumn',
@@ -53,9 +57,7 @@ Ext.define('Demo.view.repo.RepoView', {
         align: 'center',
         renderer: RendererUtil.bold,
         summaryType: 'sum',
-        summaryRenderer: function (value, summaryData, dataIndex) {
-            return `<b>${value} Watchers</b>`;
-        }
+        summaryRenderer: 'sumSummary'
     },
     {
         xtype: 'widgetcolumn',
@@ -69,9 +71,7 @@ Ext.define('Demo.view.repo.RepoView', {
             tooltip: 'View Issues',
             preventDefault: true,
             bind: { href: '{record.url}' },
-            handler: function (btn, eOpts) {
-                console.log(btn.href + '/issues');
-            }
+            handler: 'onViewIssuesClick'
         }
     },
     {
@@ -89,15 +89,13 @@ Ext.define('Demo.view.repo.RepoView', {
     },
     {
         xtype: 'datecolumn',
-        dataIndex: 'updated_at',
-        text: 'Last Updated',
-        width: 200,
+        dataIndex: 'pushed_at',
+        text: 'Last Push to Repo',
+        width: 300,
         align: 'right',
+        format: 'l, M jS, Y, g:i a',
         summaryType: 'max',
-        summaryRenderer: function (value, summaryData, dataIndex) {
-            var hours = Ext.Date.diff(new Date(value), Date.now(), Ext.Date.HOUR);
-            return `<b>${hours} ${hours>1 ? 'Hrs' : 'Hr'} Since Last Commit</b>`;
-        }
+        summaryRenderer: 'pushedAtSummary' // Look in RepoViewController.js
     },
     {
         xtype: 'widgetcolumn',
